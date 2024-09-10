@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-
+import React from 'react'
 const Button = (props) => {
 
     const { classname = "bg-green-400", children = "button" } = props;
