@@ -9,3 +9,11 @@ export default [
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
 ];
+
+// module.exports = {
+//   // Konfigurasi lainnya...
+//   rules: {
+//     // Aturan lainnya...
+//     'react/react-in-jsx-scope': 'off', // Mengabaikan peringatan impor React
+//   },
+// };
