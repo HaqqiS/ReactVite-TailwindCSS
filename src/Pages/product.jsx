@@ -3,7 +3,7 @@ import React from "react";
 
 const ProductsPage = () => {
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-900 ">
+        <div className="flex justify-center items-center min-h-screen bg-slate-900 ">
             <CardProduct>
                 <CardProduct.Header image="/public/images/shoes-2.jpg" />
                 <CardProduct.Body title="Sepatu Baru">
