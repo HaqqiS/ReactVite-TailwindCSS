@@ -4,7 +4,7 @@ import Button from "../Elements/Button";
 const CardProduct = (props) => {
     const { children } = props;
     return (
-        <div className="max-w-xs bg-gray-800 border border-gray-700 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mx-2">
+        <div className="max-w-xs bg-gray-800 border border-gray-700 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-4">
             {children}
         </div>
     );
@@ -13,22 +13,28 @@ const CardProduct = (props) => {
 export const Header = (props) => {
     const { image } = props;
     return (
-        <a href="#">
-            <img src={image} alt="product" className="p-5 rounded-t-lg" />
+        <a href="#" className="">
+            <img
+                src={image}
+                alt="product"
+                className=" rounded-t-lg object-cover h-72 min-w-full"
+            />
         </a>
     );
 };
 
 export const Body = (props) => {
-    const { children, title } = props;
+    const { children, name } = props;
     return (
-        <div className="px-6 pb-5">
+        <div className="mx-5 my-3">
             <a href="#">
                 <h5 className="text-2xl font-bold tracking-tight text-white hover:text-gray-400 transition-colors">
-                    {title}
+                    {name}
                 </h5>
             </a>
-            <p className="text-sm text-gray-400 mt-2">{children}</p>
+            <p className="text-sm text-gray-400   max-h-20 overflow-hidden ">
+                {children}
+            </p>
         </div>
     );
 };
@@ -36,7 +42,7 @@ export const Body = (props) => {
 export const Footer = (props) => {
     const { price } = props;
     return (
-        <div className="flex items-center justify-between px-5 pb-5">
+        <div className="flex items-center justify-between mx-5 mb-5">
             <span className="text-m font-bold text-white">{price}</span>
             <Button classname="bg-blue-600">Add To Cart</Button>
         </div>
