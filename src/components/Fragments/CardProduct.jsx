@@ -17,7 +17,7 @@ export const Header = (props) => {
             <img
                 src={image}
                 alt="product"
-                className=" rounded-t-lg object-cover h-72 min-w-full"
+                className=" rounded-t-lg object-cover aspect-4/3 min-w-full"
             />
         </a>
     );
@@ -42,7 +42,7 @@ export const Body = (props) => {
 export const Footer = (props) => {
     const { price } = props;
     return (
-        <div className="flex items-center justify-between mx-5 mb-5">
+        <div className="flex items-center justify-between mx-5 my-5">
             <span className="text-m font-bold text-white">{price}</span>
             <Button classname="bg-blue-600">Add To Cart</Button>
         </div>
