@@ -40,11 +40,22 @@ export const Body = (props) => {
 };
 
 export const Footer = (props) => {
-    const { price } = props;
+    const { price, handleAddToCart, id } = props;
     return (
         <div className="flex items-center justify-between mx-5 my-5">
-            <span className="text-m font-bold text-white">{price}</span>
-            <Button classname="bg-blue-600">Add To Cart</Button>
+            <span className="text-m font-bold text-white">
+                {" "}
+                {price.toLocaleString("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                })}
+            </span>
+            <Button
+                classname="bg-blue-600 "
+                onClick={() => handleAddToCart(id)}
+            >
+                Add To Cart
+            </Button>
         </div>
     );
 };
