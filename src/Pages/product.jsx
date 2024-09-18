@@ -1,6 +1,6 @@
 import Button from "../components/Elements/Button";
 import CardProduct from "../components/Fragments/CardProduct";
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useRef, useState } from "react";
 
 const products = [
     {
@@ -87,6 +87,23 @@ const ProductsPage = () => {
         }
     };
 
+    //useRef
+    const cartRef = useRef(JSON.parse(localStorage.getItem("cart")) || []);
+    // eslint-disable-next-line no-unused-vars
+    const handleAddToCartRef = (id) => {
+        cartRef.current = [...cartRef.current, { id, qty: 1 }];
+        localStorage.setItem("cart", JSON.stringify(cartRef.current));
+    };
+
+    const totalPriceRef = useRef(null);
+    useEffect(() => {
+        if (cart.length > 0) {
+            totalPriceRef.current.style.display = "table-row";
+        } else {
+            totalPriceRef.current.style.display = "none";
+        }
+    }, [cart]);
+
     return (
         <div className="container min-h-screen mx-auto relative">
             <nav className="bg-slate-800 h-20 w-full top-0 left-0 fixed z-[1] flex justify-between items-center px-20">
@@ -143,7 +160,7 @@ const ProductsPage = () => {
                                     </tr>
                                 );
                             })}
-                            <tr className="font-bold">
+                            <tr className="font-bold" ref={totalPriceRef}>
                                 <td colSpan={3}>Price</td>
                                 <td>
                                     {totalPrice.toLocaleString("id-ID", {
