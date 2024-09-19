@@ -4,7 +4,7 @@ import Button from "../Elements/Button";
 const CardProduct = (props) => {
     const { children } = props;
     return (
-        <div className="max-w-xs bg-gray-800 border border-gray-700 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-4">
+        <div className="max-w-64 bg-gray-800 border border-gray-700 rounded-lg shadow-lg transform transition duration-500 hover:scale-105 mt-4 group">
             {children}
         </div>
     );
@@ -13,13 +13,13 @@ const CardProduct = (props) => {
 export const Header = (props) => {
     const { image } = props;
     return (
-        <a href="#" className="">
+        <div className="aspect-4/3 rounded-lg overflow-hidden relative">
             <img
                 src={image}
                 alt="product"
-                className=" rounded-t-lg object-cover aspect-4/3 min-w-full"
+                className="object-cover  h-full w-full transform  group-hover:scale-105  transition duration-500 ease-in-out"
             />
-        </a>
+        </div>
     );
 };
 
@@ -28,11 +28,11 @@ export const Body = (props) => {
     return (
         <div className="mx-5 my-3">
             <a href="#">
-                <h5 className="text-2xl font-bold tracking-tight text-white hover:text-gray-400 transition-colors">
+                <h5 className="text-2xl font-bold tracking-tight text-white hover:text-gray-400 transition-colors truncate">
                     {name}
                 </h5>
             </a>
-            <p className="text-sm text-gray-400   max-h-20 overflow-hidden ">
+            <p className="text-sm text-gray-400   max-h-16 overflow-hidden ">
                 {children}
             </p>
         </div>
@@ -45,15 +45,12 @@ export const Footer = (props) => {
         <div className="flex items-center justify-between mx-5 my-5">
             <span className="text-m font-bold text-white">
                 {" "}
-                {price.toLocaleString("id-ID", {
+                {price.toLocaleString("en-US", {
                     style: "currency",
-                    currency: "IDR",
+                    currency: "usd",
                 })}
             </span>
-            <Button
-                classname="bg-blue-600 "
-                onClick={() => handleAddToCart(id)}
-            >
+            <Button classname="bg-blue-600 " onClick={() => handleAddToCart(id)}>
                 Add To Cart
             </Button>
         </div>

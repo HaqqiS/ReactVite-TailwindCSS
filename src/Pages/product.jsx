@@ -1,42 +1,23 @@
 import Button from "../components/Elements/Button";
 import CardProduct from "../components/Fragments/CardProduct";
 import { React, useEffect, useRef, useState } from "react";
-
-const products = [
-    {
-        id: 1,
-        name: "Sepatu Dior",
-        price: 850000,
-        image: "/images/shoes-2.jpg",
-        description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, veniam temporibus alias a laboriosam quia, voluptatibus porro maiores commodi nostrum rem sequi molestiae? Provident odio nam dolores repudiandae esse velit.`,
-    },
-    {
-        id: 2,
-        name: "Sepatu Mongkey",
-        price: 500000,
-        image: "/images/shoes-1.jpg",
-        description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, veniam temporibus alias a laboriosam quia, voluptatibus porro maiores commodi nostrum rem sequi molestiae? Provident odio nam dolores repudiandae esse velit.`,
-    },
-    {
-        id: 3,
-        name: "Sepatu Puma",
-        price: 355000,
-        image: "/images/shoes-2.jpg",
-        description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, veniam temporibus alias a laboriosam quia, voluptatibus porro maiores commodi nostrum rem sequi molestiae? Provident odio nam dolores repudiandae esse velit.`,
-    },
-];
+import { getProducts } from "../services/product.service";
 
 const email = localStorage.getItem("email");
 
 const ProductsPage = () => {
-    // state untuk menyimpan data cart
+    //* state untuk menyimpan data cart
     // data cart berupa array of object yang berisi id produk, qty produk, dan harga produk
     const [cart, setCart] = useState([]);
-    // state untuk menyimpan total harga dari cart
+
+    // * state untuk menyimpan total harga dari cart
     // state ini digunakan untuk menampilkan total harga di halaman product
     const [totalPrice, setTotalPrice] = useState(0);
+
+    const [products, setProducts] = useState([]);
+
     /**
-     * Saat component pertama kali di render, maka akan menjalankan useEffect ini.
+     ** Saat component pertama kali di render, maka akan menjalankan useEffect ini.
      * Didalam useEffect ini, kita akan mengambil data cart yang tersimpan di localStorage
      * dan mengisikan ke state cart dengan menggunakan setCart.
      * Jika data cart tidak ada di localStorage, maka state cart akan diisi dengan array kosong.
@@ -44,12 +25,20 @@ const ProductsPage = () => {
     useEffect(() => {
         setCart(JSON.parse(localStorage.getItem("cart")) || []);
     }, []);
-    // Saat state cart berubah, maka akan menjalankan useEffect ini.
+
+    useEffect(() => {
+        getProducts((data) => {
+            // console.log(data);
+            setProducts(data);
+        });
+    });
+
+    //* Saat state cart berubah, maka akan menjalankan useEffect ini.
     // Didalam useEffect ini, kita akan menghitung total harga dari cart
     // dan mengisikan ke state totalPrice dengan menggunakan setTotalPrice.
     useEffect(() => {
         // Jika cart tidak kosong, maka hitung total harga nya
-        if (cart.length > 0) {
+        if (products.length > 0 && cart.length > 0) {
             // Buat variabel sum untuk menyimpan hasil perhitungan total harga
             const sum = cart.reduce((acc, item) => {
                 // Cari produk yang id nya sama dengan item.id
@@ -63,7 +52,7 @@ const ProductsPage = () => {
             // Simpan state cart ke localStorage
             localStorage.setItem("cart", JSON.stringify(cart));
         }
-    }, [cart]);
+    }, [cart, products]);
 
     const handleLogout = () => {
         localStorage.removeItem("email");
@@ -80,7 +69,11 @@ const ProductsPage = () => {
     const handleAddToCart = (id) => {
         if (cart.find((item) => item.id === id)) {
             // Jika produk sudah ada dalam cart, maka qty produk akan ditambahkan 1
-            setCart(cart.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
+            setCart(
+                cart.map((item) =>
+                    item.id === id ? { ...item, qty: item.qty + 1 } : item
+                )
+            );
         } else {
             // Jika produk belum ada dalam cart, maka produk akan ditambahkan ke dalam cart dengan qty 1
             setCart([...cart, { id, qty: 1 }]);
@@ -118,16 +111,23 @@ const ProductsPage = () => {
                 </div>
             </nav>
             <div className="flex py-24">
-                <div className="flex flex-wrap justify-center items-center  gap-3 w-4/6">
-                    {products.map((product) => (
-                        <CardProduct key={product.id}>
-                            <CardProduct.Header image={product.image} />
-                            <CardProduct.Body name={product.name}>{product.description}</CardProduct.Body>
-                            <CardProduct.Footer price={product.price} id={product.id} handleAddToCart={handleAddToCart} />
-                        </CardProduct>
-                    ))}
+                <div className="flex flex-wrap justify-center items-center  gap-4 w-9/12">
+                    {products.length > 0 &&
+                        products.map((product) => (
+                            <CardProduct key={product.id}>
+                                <CardProduct.Header image={product.image} />
+                                <CardProduct.Body name={product.title}>
+                                    {product.description}
+                                </CardProduct.Body>
+                                <CardProduct.Footer
+                                    price={product.price}
+                                    id={product.id}
+                                    handleAddToCart={handleAddToCart}
+                                />
+                            </CardProduct>
+                        ))}
                 </div>
-                <div className="w-2/6">
+                <div className="w-3/12">
                     <h1 className="text-3xl font-bold text-white mt-3">Cart</h1>
                     <table className="table-auto text-left border-separate  border-spacing-x-3">
                         <thead>
@@ -139,27 +139,32 @@ const ProductsPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {cart.map((item) => {
-                                const product = products.find((product) => product.id === item.id);
-                                return (
-                                    <tr key={item.id}>
-                                        <td>{product.name}</td>
-                                        <td>
-                                            {product.price.toLocaleString("id-ID", {
-                                                style: "currency",
-                                                currency: "IDR",
-                                            })}
-                                        </td>
-                                        <td>{item.qty}</td>
-                                        <td>
-                                            {(item.qty * product.price).toLocaleString("id-ID", {
-                                                style: "currency",
-                                                currency: "IDR",
-                                            })}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {products.length > 0 &&
+                                cart.map((item) => {
+                                    const product = products.find(
+                                        (product) => product.id === item.id
+                                    );
+                                    return (
+                                        <tr key={item.id}>
+                                            <td>{product.title.substring(0, 15)}...</td>
+                                            <td>
+                                                {product.price.toLocaleString("en-US", {
+                                                    style: "currency",
+                                                    currency: "usd",
+                                                })}
+                                            </td>
+                                            <td>{item.qty}</td>
+                                            <td>
+                                                {(
+                                                    item.qty * product.price
+                                                ).toLocaleString("en-US", {
+                                                    style: "currency",
+                                                    currency: "usd",
+                                                })}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             <tr className="font-bold" ref={totalPriceRef}>
                                 <td colSpan={3}>Price</td>
                                 <td>
