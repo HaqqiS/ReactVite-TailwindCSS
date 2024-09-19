@@ -2,8 +2,7 @@ import Button from "../components/Elements/Button";
 import CardProduct from "../components/Fragments/CardProduct";
 import { React, useEffect, useRef, useState } from "react";
 import { getProducts } from "../services/product.service";
-
-const email = localStorage.getItem("email");
+import { getUserName } from "../services/auth.service";
 
 const ProductsPage = () => {
     //* state untuk menyimpan data cart
@@ -16,6 +15,8 @@ const ProductsPage = () => {
 
     const [products, setProducts] = useState([]);
 
+    const [username, setUsername] = useState("");
+
     /**
      ** Saat component pertama kali di render, maka akan menjalankan useEffect ini.
      * Didalam useEffect ini, kita akan mengambil data cart yang tersimpan di localStorage
@@ -24,6 +25,15 @@ const ProductsPage = () => {
      */
     useEffect(() => {
         setCart(JSON.parse(localStorage.getItem("cart")) || []);
+    }, []);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            setUsername(getUserName(token));
+        } else {
+            window.location.href = "/login";
+        }
     }, []);
 
     useEffect(() => {
@@ -55,8 +65,7 @@ const ProductsPage = () => {
     }, [cart, products]);
 
     const handleLogout = () => {
-        localStorage.removeItem("email");
-        localStorage.removeItem("password");
+        localStorage.removeItem("token");
         window.location.href = "/login";
     };
 
@@ -103,7 +112,7 @@ const ProductsPage = () => {
                 <div className="text-white">Logo</div>
                 <div className="space-x-4">
                     <a href="#" className="text-white">
-                        {email}
+                        {username}
                     </a>
                     <Button classname="bg-rose-600" onClick={handleLogout}>
                         Logout
