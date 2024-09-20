@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import Button from "../Elements/Button";
+import { Link } from "react-router-dom";
 const CardProduct = (props) => {
     const { children } = props;
     return (
@@ -11,27 +12,29 @@ const CardProduct = (props) => {
 };
 
 export const Header = (props) => {
-    const { image } = props;
+    const { image, id } = props;
     return (
         <div className="aspect-4/3 rounded-lg overflow-hidden relative">
-            <img
-                src={image}
-                alt="product"
-                className="object-cover  h-full w-full transform  group-hover:scale-105  transition duration-500 ease-in-out"
-            />
+            <Link to={`/product/${id}`}>
+                <img
+                    src={image}
+                    alt="product"
+                    className="object-cover  h-full w-full transform  group-hover:scale-105  transition duration-500 ease-in-out"
+                />
+            </Link>
         </div>
     );
 };
 
 export const Body = (props) => {
-    const { children, name } = props;
+    const { children, name, id } = props;
     return (
         <div className="mx-5 my-3">
-            <a href="#">
-                <h5 className="text-2xl font-bold tracking-tight text-white hover:text-gray-400 transition-colors truncate">
+            <Link to={`/product/${id}`}>
+                <h5 className="text-2xl font-bold tracking-tight text-white group-hover:text-gray-400 transition-colors truncate">
                     {name}
                 </h5>
-            </a>
+            </Link>
             <p className="text-sm text-gray-400   max-h-16 overflow-hidden ">
                 {children}
             </p>
