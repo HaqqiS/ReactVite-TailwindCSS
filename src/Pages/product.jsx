@@ -2,7 +2,8 @@ import Button from "../components/Elements/Button";
 import CardProduct from "../components/Fragments/CardProduct";
 import { React, useEffect, useRef, useState } from "react";
 import { getProducts } from "../services/product.service";
-import { getUserName } from "../services/auth.service";
+import { useLogin } from "../hooks/useLogin";
+import { Link } from "react-router-dom";
 
 const ProductsPage = () => {
     //* state untuk menyimpan data cart
@@ -15,7 +16,7 @@ const ProductsPage = () => {
 
     const [products, setProducts] = useState([]);
 
-    const [username, setUsername] = useState("");
+    const username = useLogin();
 
     /**
      ** Saat component pertama kali di render, maka akan menjalankan useEffect ini.
@@ -25,15 +26,6 @@ const ProductsPage = () => {
      */
     useEffect(() => {
         setCart(JSON.parse(localStorage.getItem("cart")) || []);
-    }, []);
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            setUsername(getUserName(token));
-        } else {
-            window.location.href = "/login";
-        }
     }, []);
 
     useEffect(() => {
@@ -111,9 +103,12 @@ const ProductsPage = () => {
             <nav className="bg-slate-800 h-20 w-full top-0 left-0 fixed z-[1] flex justify-between items-center px-20">
                 <div className="text-white">Logo</div>
                 <div className="space-x-4">
-                    <a href="#" className="text-white">
+                    <Link
+                        to="/profile"
+                        className="px-4 py-2 text-white capitalize hover:border rounded-full hover:bg-slate-700"
+                    >
                         {username}
-                    </a>
+                    </Link>
                     <Button classname="bg-rose-600" onClick={handleLogout}>
                         Logout
                     </Button>
