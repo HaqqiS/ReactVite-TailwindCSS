@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getDetailProduct } from "../services/product.service";
+// import { useLogin } from "../hooks/useLogin";s
 
 const DetailProductPage = () => {
     const { id } = useParams();
     const [product, setProduct] = useState({});
+
+    // const username = useLogin();
 
     useEffect(() => {
         getDetailProduct(id, (data) => {
