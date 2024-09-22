@@ -1,9 +1,10 @@
 import CardProduct from "../components/Fragments/CardProduct";
-import { React, useEffect, useState } from "react";
+import { React, useContext, useEffect, useState } from "react";
 import { getProducts } from "../services/product.service";
 import { useLogin } from "../hooks/useLogin";
 import TableCart from "../components/Fragments/TableCart";
 import Navbar from "../components/Layouts/Navbar";
+import { DarkMode } from "../context/DarkMode";
 
 const ProductsPage = () => {
     //* state untuk menyimpan data cart
@@ -15,6 +16,8 @@ const ProductsPage = () => {
     // const [totalPrice, setTotalPrice] = useState(0);
 
     const [products, setProducts] = useState([]);
+
+    const { isDarkMode } = useContext(DarkMode);
 
     useLogin();
 
@@ -65,9 +68,9 @@ const ProductsPage = () => {
 
     return (
         <div className="container min-h-screen mx-auto relative">
-            {/* <Navbar /> */}
+            <Navbar />
 
-            <div className="flex py-24">
+            <div className={`flex py-24 ${isDarkMode ? "bg-slate-900" : "bg-slate-100"}`}>
                 <div className="flex flex-wrap justify-center items-center  gap-4 w-9/12">
                     {products.length > 0 &&
                         products.map((product) => (
@@ -87,7 +90,7 @@ const ProductsPage = () => {
                         ))}
                 </div>
                 <div className="w-3/12">
-                    <h1 className="text-3xl font-bold text-white mt-3">Cart</h1>
+                    <h1 className="text-3xl font-bold text-blue-500 mt-3">Cart</h1>
                     <TableCart products={products} />
                 </div>
             </div>

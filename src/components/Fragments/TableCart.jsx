@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { DarkMode } from "../../context/DarkMode";
 const TableCart = (props) => {
     const { products } = props;
     const cart = useSelector((state) => state.cart.data);
     const [totalPrice, setTotalPrice] = useState(0);
+    const { isDarkMode } = useContext(DarkMode);
+
     //* Saat state cart berubah, maka akan menjalankan useEffect ini.
     // Didalam useEffect ini, kita akan menghitung total harga dari cart
     // dan mengisikan ke state totalPrice dengan menggunakan setTotalPrice.
@@ -36,7 +39,11 @@ const TableCart = (props) => {
     }, [cart]);
 
     return (
-        <table className="table-auto text-left border-separate  border-spacing-x-3">
+        <table
+            className={`table-auto text-left border-separate  border-spacing-x-3 ${
+                isDarkMode ? "text-white" : "text-black"
+            }`}
+        >
             <thead>
                 <tr>
                     <th>Name</th>

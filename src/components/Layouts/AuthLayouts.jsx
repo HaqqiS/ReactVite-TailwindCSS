@@ -1,18 +1,29 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { DarkMode } from "../../context/DarkMode";
+import Button from "../Elements/Button";
 
 const AuthLayouts = (props) => {
     const { children, title, type } = props;
+    const { isDarkMode, setIsDarkMode } = useContext(DarkMode);
+    // console.log("isDarkMode : ", isDarkMode);
+
     return (
-        <div className="flex justify-center min-h-screen items-center bg-slate-900">
+        <div
+            className={`flex justify-center min-h-screen items-center bg-slate-900 ${
+                isDarkMode ? "bg-slate-900" : "bg-slate-100"
+            } `}
+        >
+            <Button
+                classname="absolute top-2 right-2 bg-neutral-900 text-white rounded-2xl"
+                onClick={() => setIsDarkMode(!isDarkMode)}
+            >
+                {isDarkMode ? "☀️Light" : "🌑Dark"}
+            </Button>
             <div className="w-full max-w-sm text-white bg-slate-800 rounded-lg shadow-lg p-8 ">
-                <h1 className="text-3xl font-bold mb-2 text-blue-600">
-                    {title}
-                </h1>
-                <p className="font-medium mb-8">
-                    Welcome, Please enter your detail
-                </p>
+                <h1 className="text-3xl font-bold mb-2 text-blue-600">{title}</h1>
+                <p className="font-medium mb-8">Welcome, Please enter your detail</p>
                 {children}
                 <Navigation type={type} />
 

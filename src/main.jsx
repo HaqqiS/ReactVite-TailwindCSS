@@ -1,7 +1,6 @@
-import { StrictMode } from "react";
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RegisterPage from "./Pages/register.jsx";
 import LoginPage from "./Pages/login.jsx";
@@ -11,6 +10,7 @@ import ProfilePage from "./Pages/profile.jsx";
 import DetailProductPage from "./Pages/detailProduct.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import DarkModeContextProvider from "./context/DarkMode.jsx";
 // import Navbar from "./components/Layouts/Navbar.jsx";
 
 const router = createBrowserRouter([
@@ -45,7 +45,9 @@ createRoot(document.getElementById("root")).render(
     <StrictMode>
         <Provider store={store}>
             {/* <Navbar /> */}
-            <RouterProvider router={router} />
+            <DarkModeContextProvider>
+                <RouterProvider router={router} />
+            </DarkModeContextProvider>
         </Provider>
     </StrictMode>
 );
