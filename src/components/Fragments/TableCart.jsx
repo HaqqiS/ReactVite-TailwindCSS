@@ -1,12 +1,14 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DarkMode } from "../../context/DarkMode";
+import { useTotalPrice, useTotalPriceDispatch } from "../../context/TotalPriceContext";
 const TableCart = (props) => {
     const { products } = props;
     const cart = useSelector((state) => state.cart.data);
-    const [totalPrice, setTotalPrice] = useState(0);
     const { isDarkMode } = useContext(DarkMode);
+    const dispatch = useTotalPriceDispatch();
+    const { total } = useTotalPrice();
 
     //* Saat state cart berubah, maka akan menjalankan useEffect ini.
     // Didalam useEffect ini, kita akan menghitung total harga dari cart
@@ -23,7 +25,12 @@ const TableCart = (props) => {
                 return acc + product.price * item.qty;
             }, 0);
             // Set state totalPrice dengan hasil perhitungan total harga
-            setTotalPrice(sum);
+            dispatch({
+                type: "UPDATE",
+                payload: {
+                    total: sum,
+                },
+            });
             // Simpan state cart ke localStorage
             localStorage.setItem("cart", JSON.stringify(cart));
         }
@@ -80,7 +87,7 @@ const TableCart = (props) => {
                 <tr className="font-bold" ref={totalPriceRef}>
                     <td colSpan={3}>Price</td>
                     <td>
-                        {totalPrice.toLocaleString("id-ID", {
+                        {total.toLocaleString("id-ID", {
                             style: "currency",
                             currency: "IDR",
                         })}
